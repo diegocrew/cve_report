@@ -1,0 +1,24 @@
+# GitHub CODEOWNERS for CVE Reporter Security Team Routing
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# =============================================================================
+# CVE SEVERITY ROUTING
+# =============================================================================
+# This file documents the security team structure. For automated assignment
+# logic, see .github/security-owners.json
+#
+# Critical (CVSS 10-9) → diegocrew
+# High (CVSS 8-6)      → jonescrew
+# Medium/Low (CVSS 5-0) → alanitacrew
+# CISA KEV (Exploited)  → diegocrew (P0-CRITICAL override)
+#
+# =============================================================================
+
+# Repository structure ownership
+*.md @diegocrew
+.github/ @diegocrew
+.github/workflows/ @diegocrew
+.github/security-owners.json @diegocrew
+
+# Default security team
+* @diegocrew

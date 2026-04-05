@@ -1,0 +1,34 @@
+{
+  "severity_routing": {
+    "critical": {
+      "cvss_range": [9.0, 10.0],
+      "assignees": ["diegocrew"],
+      "label": "severity-critical",
+      "priority": "P0"
+    },
+    "high": {
+      "cvss_range": [6.0, 8.9],
+      "assignees": ["diegocrew"],
+      "label": "severity-high",
+      "priority": "P1"
+    },
+    "medium": {
+      "cvss_range": [0, 5.9],
+      "assignees": ["diegocrew"],
+      "label": "severity-medium",
+      "priority": "P2"
+    }
+  },
+  "cisa_kev_override": {
+    "enabled": true,
+    "assignees": ["diegocrew"],
+    "label": "actively-exploited",
+    "priority": "P0-CRITICAL"
+  },
+  "epss_threshold": {
+    "high_exploit_risk": {
+      "threshold": 0.7,
+      "addLabel": "high-exploit-risk"
+    }
+  }
+}
