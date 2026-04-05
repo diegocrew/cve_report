@@ -129,7 +129,89 @@ The GitHub Action requirecheckout the repository and access workflow files
 - **Issue Labels**: Automatically tagged with `security`, `cve`, and `automated` for easy searching and filtering
 - **Daily Schedule**: Runs at 00:00 UTC (equivalent to 8:00 PM ET or 7:00 PM CT depending on daylight saving time
 - **Issue Labels**: Automatically tagged with `security`, `cve`, and `automated` for easy filtering
-- *Workflow File Reference
+
+## Security Team Assignment & Routing
+
+The repository uses intelligent routing to automatically assign CVE reports to the appropriate security team members based on severity levels.
+
+### Team Structure
+
+Security team members are assigned by CVSS severity score:
+
+| CVSS Score | Severity | Assigned To | Priority |
+|-----------|----------|------------|----------|
+| 9.0 - 10.0 | Critical | `diegocrew` | P0 |
+| 6.0 - 8.9 | High | `jonescrew` | P1 |
+| 0 - 5.9 | Medium/Low | `alanitacrew` | P2 |
+| **CISA KEV** | **Actively Exploited** | **`diegocrew`** | **P0-CRITICAL** |
+
+### Configuration Files
+
+#### **[`.github/security-owners.json`](.github/security-owners.json)**
+Defines severity-based routing rules and team assignments. Each CVE is automatically routed based on:
+- **CVSS Score**: Primary routing mechanism (Critical/High/Medium/Low)
+- **CISA KEV Status**: Override routing - actively exploited vulnerabilities always route to the incident response team
+- **EPSS Threshold**: High exploit probability (>70%) is flagged with additional labels
+
+**Example structure:**
+```json
+{
+  "severity_routing": {
+    "critical": {
+      "cvss_range": [9.0, 10.0],
+      "assignees": ["diegocrew"],
+      "label": "severity-critical",
+      "priority": "P0"
+    },
+    "cisa_kev_override": {
+      "enabled": true,
+      "assignees": ["diegocrew"],
+      "label": "actively-exploited",
+      "priority": "P0-CRITICAL"
+    }
+  }
+}
+```
+
+#### **[`.github/CODEOWNERS`](.github/CODEOWNERS)**
+Maintains the security team roster and serves as documentation for the team structure. Specifies code ownership for security-critical files:
+- Workflow files and configurations → `diegocrew` (primary owner)
+- Security owner configurations → `diegocrew`
+- Repository documentation → Security team
+
+The CODEOWNERS file is referenced in GitHub for PR review requirements.
+
+### Automated Assignment Workflow
+
+When a daily CVE report is created:
+
+1. **Parse Security Config**: The workflow reads `security-owners.json`
+2. **Extract CVSS Scores**: Retrieves CVSS metrics from each CVE in the NVD response
+3. **Route Assignment**: Matches CVSS range to appropriate team member
+4. **Check CISA KEV**: Red-flags actively exploited CVEs for incident response
+5. **Assign Issue**: Automatically assigns the GitHub Issue to the determined team member
+6. **Apply Labels**: Adds severity labels (`severity-critical`, `severity-high`, etc.)
+7. **Create PR**: Creates a security remediation PR assigned to the same team member for tracking
+
+### How to Update Team Assignments
+
+To modify team assignments, edit [`.github/security-owners.json`](.github/security-owners.json):
+
+```json
+"critical": {
+  "cvss_range": [9.0, 10.0],
+  "assignees": ["new-team-member"],  // Update username here
+  "label": "severity-critical",
+  "priority": "P0"
+}
+```
+
+Then update [`.github/CODEOWNERS`](.github/CODEOWNERS) to reflect the change:
+```
+.github/ @new-team-member
+```
+
+## Workflow File Reference
 
 For complete implementation details, see [`.github/workflows/cve-daily.yml`](.github/workflows/cve-daily.yml)
 
