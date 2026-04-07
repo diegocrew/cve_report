@@ -7,13 +7,13 @@
       "priority": "P0"
     },
     "high": {
-      "cvss_range": [6.0, 8.9],
+      "cvss_range": [7.0, 8.9],
       "assignees": ["diegocrew"],
       "label": "severity-high",
       "priority": "P1"
     },
     "medium": {
-      "cvss_range": [0, 5.9],
+      "cvss_range": [0, 6.9],
       "assignees": ["diegocrew"],
       "label": "severity-medium",
       "priority": "P2"
